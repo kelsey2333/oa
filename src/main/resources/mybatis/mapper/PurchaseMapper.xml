@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itek.oa.dao.PurchaseDao">
+    <insert id="insertProperties" parameterType="com.itek.oa.domain.Purchase">
+        insert into t_purchase (applyer_id, applyer_name, applyer_time, reason, property_name, number, unit_price )
+                        values (#{applyerId}, #{applyerName}, #{applyerTime}, #{reason},#{propertyName},#{number}, #{unitPrice})
+    </insert>
+    <select id="selectAllApplies" resultType="com.itek.oa.domain.Purchase">
+        select id, applyer_id, applyer_name, applyer_time from t_purchase where status = '0'
+    </select>
+    <select id="selectDetails" resultType="com.itek.oa.domain.Purchase" parameterType="int">
+        select id, applyer_id, applyer_name, applyer_time, reason, property_name, number,unit_price from t_purchase where id = #{id}
+    </select>
+    <select id="selectApprovalRoleIdById" parameterType="int" resultType="int">
+        SELECT role_id FROM t_user_role where user_id = #{approvalId}
+    </select>
+
+    <select id="selectApprovalRoleList" resultType="string" parameterType="string">
+        select approval_role_list from t_approval_list where approval_name = #{approvalName};
+    </select>
+    <insert id="insertApprovalHistory" parameterType="com.itek.oa.domain.Approval">
+        insert into t_approval (apply_id, approval_id, approval_type, result, advice) values (#{applyId}, #{approvalId},#{approvalType},#{result}, #{advice})
+    </insert>
+    <update id="updateById" parameterType="com.itek.oa.domain.Purchase" >
+        update t_purchase
+        <set >
+            <if test="applyerId != null" >
+                applyer_id = #{applyerId},
+            </if>
+            <if test="applyerName != null" >
+                applyer_name = #{applyerName},
+            </if>
+            <if test="applyerTime != null" >
+                applyer_time = #{applyerTime},
+            </if>
+            <if test="reason != null" >
+                reason = #{reason},
+            </if>
+            <if test="propertyName != null" >
+                property_name = #{propertyName},
+            </if>
+            <if test="number != null" >
+                number = #{number},
+            </if>
+            <if test="unitPrice != null" >
+                unit_price = #{unitPrice},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="approvalRoleId != null" >
+                approval_role_id = #{approvalRoleId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

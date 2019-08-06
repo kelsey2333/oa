@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itek.oa.dao.LeaveDao">
+    <insert id="insertApprovalRoleList" parameterType="com.itek.oa.domain.Leave">
+        insert into t_leave ( applyer_id ,applyer_name , start_time , end_time ,create_time , reason , status ,approval_role_id )values
+                            (#{applyerId},#{applyerName},#{startTime},#{endTime},#{createTime},#{reason},#{status},#{approvalRoleId})
+    </insert>
+    <select id="selectWillApprovalRecords" resultType="com.itek.oa.domain.Leave">
+        select id , applyer_id ,applyer_name , start_time , end_time ,create_time , reason , status ,approval_role_id from t_leave where status = '0'
+    </select>
+    <select id="selectApply" resultType="com.itek.oa.domain.Leave" parameterType="int">
+        select  id , applyer_id, applyer_name, start_time,  end_time, create_time,  reason , status ,approval_role_id from t_leave where id = #{id}
+    </select>
+    <insert id="insertApprovalResult" parameterType="com.itek.oa.domain.Approval">
+        insert  into t_approval (apply_id, approval_id, approval_type, result, advice ) values (#{applyId},#{approvalId},#{approvalType},#{result},#{advice})
+    </insert>
+    <select id="selectApprovalRoleList" resultType="string">
+        select approval_role_list from t_approval_list;
+    </select>
+    <select id="selectApprovalRoleId" parameterType="int" resultType="int">
+        select approval_role_id  from t_leave where id = #{applyId}
+    </select>
+    <update id="updateByApplyId" parameterType="com.itek.oa.domain.Leave" >
+        update t_leave
+        <set >
+            <if test="applyerId != null" >
+                applyer_id = #{applyerId},
+            </if>
+            <if test="applyerName != null" >
+                applyer_name = #{applyerName},
+            </if>
+            <if test="startTime != null" >
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null" >
+                end_time = #{endTime},
+            </if>
+            <if test="reason != null" >
+                reason = #{reason},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="approvalRoleId != null" >
+                approval_role_id = #{approvalRoleId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

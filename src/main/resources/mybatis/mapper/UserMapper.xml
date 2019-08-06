@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itek.oa.dao.UserDao">
+    <insert id="insertUser" parameterType="com.itek.oa.domain.User">
+        insert into t_user (login_name,login_pwd,name,status) values (#{loginName},#{password},#{userName},#{status})
+    </insert>
+    <select id="checkLogin" parameterType="com.itek.oa.domain.User" resultMap="UserMap">
+        select id,login_name, login_pwd,name,status from t_user where login_name = #{loginName}and login_pwd = #{password}
+    </select>
+    <resultMap id="UserMap" type="com.itek.oa.domain.User">
+        <result property="id" column="id"/>
+        <result property="loginName" column="login_name"/>
+        <result property="password" column="login_pwd"/>
+        <result property="userName" column="name"/>
+        <result property="status" column="status"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itek.oa.dao.MenuDao">
+    <insert id="insertMenu" parameterType="com.itek.oa.domain.Menu">
+        INSERT INTO t_menu ( menu_name, menu_icon, menu_link, pid ) values (#{menuName}, #{menuIcon}, #{menuLink}, #{pid})
+    </insert>
+    <select id="selectTopMenusByUserId" resultType="com.itek.oa.domain.Menu" parameterType="int">
+        SELECT m.id , m.menu_name , m.menu_link , m.menu_icon ,m.pid FROM t_user u
+        LEFT JOIN t_user_role ur
+        on u.id = ur.user_id
+        LEFT JOIN t_role r
+        ON ur.role_id = r.id
+        LEFT join t_role_menu rm
+        ON r.id = rm.role_id
+        LEFT JOIN t_menu m
+        on rm.menu_id = m.id
+        WHERE u.id = #{userId}
+    </select>
+   <select id="selectSubMenus" parameterType="int" resultType="com.itek.oa.domain.Menu">
+       select * from t_menu where pid = #{menuId}
+   </select>
+</mapper>
